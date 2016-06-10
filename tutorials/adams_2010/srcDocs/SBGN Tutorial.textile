@@ -1,0 +1,348 @@
+h1. An introduction to Systems Biology Graphical Notation
+
+{toc}
+
+The goal of the Systems Biology Graphical Notation (SBGN) is to standardize the graphical/visual representation of essential biochemical and cellular processes studied in systems biology.
+
+SBGN has  excellent, detailed specification documents, which this tutorial will quote from extensively. However we will try to introduce the concepts in a slightly less dry fashion than the specification document. 
+
+SBGN defines a comprehensive set of symbols with precise semantics, together with detailed syntactic rules defining their use. It also describes the manner in which such graphical information should be interpreted. Standardizing graphical notations for describing biological interactions is an important step towards the efficient and accurate transmission of biological knowledge between different communities.
+
+Traditionally, diagrams representing interactions among genes and molecules have been drawn in an informal manner, using simple unconstrained shapes and edges such as arrows. Until the development of SBGN, no standard agreed-upon convention existed defining exactly how to draw such diagrams in a way that helps readers interpret them consistently, correctly, and unambiguously. By standardizing the visual notation, SBGN can serve as a bridge between different communities such as computational and experimental biologists, and even more broadly in education and publishing.
+
+For SBGN to be successful, it must satisfy a majority of technical and practical needs, and must be embraced by the community of researchers in biology. With regards to the technical and practical aspects, a successful visual language must meet at least the following goals:
+# Allow the representation of diverse biological objects and interactions;
+# Be semantically and visually unambiguous;
+# Allow implementation in software that can aid the drawing and verification of diagrams;
+# Have semantics that are sufficiently well defined that software tools can convert graphical models into formal models, suitable for analysis if not for simulation;
+# Be unrestricted in use and distribution, so that the entire community can freely use the notation without encumbrance or fear of intellectual property infractions.
+#  Be comprehensible without software, for example in printed material.
+
+h2. Three types of SBGN diagrams
+
+It is extremely difficult to represent all of the important parts of a biochemical network in a single diagram. 
+In SBGN, the term entity is mentioned many times. An entity refers  to any biological thing – a compartment, compound, or macromolecule.
+ Three types of diagram notations are possible within the SBGN framework:
+ 
+# *Process Description diagrams (PD)*  - causal sequences of processes and results. Although SBGN is not a modelling language, some of the concepts of this notation are derived from modelling. Of the three languages, this is most suited for conversion to a modelling description.
+# *Activity flow (AF) diagrams* – flux of information going from one entity to another.
+# *Entity-relationship (ER) diagrams* – the totality of interactions between species regardless of temporal sequence. This notation is designed for representing an independent set of known facts about a particular .
+
+The specification for the Process Description was published first, and has the greatest software support so far.
+This tutorial will focus mainly on Process Description notation.
+
+h2. The Process Description Notation
+
+Below is an example diagram of the MAP kinase cascade, depicted in SBGN-PD:
+!{width:80%}images/SBGNEg1.png!
+
+There are symbols for macromolecules and simple compounds, and various types of connecting arcs, for *catalysis*, *consumption* and *production*. Macromolecules can contain _state labels_ to convey notions of activity or post-translational modification. Entities that are repeated on the diagram are labeled with black interiors  called _clone markers_. This signifies that the element appears more than once for the sake of visual clarity, rather than being a distinct component of the pathway.
+
+The main purpose of the Process Description notation is to indicate change, showing how different entities are transformed by various processes.
+
+The main types of visual features, or _glyphs_ are:
+# *Entity Pool Nodes*, representing populations of things.
+# *Process nodes*, representing transformation.
+# *Connecting arcs*, linking transformations with things.
+# *Logical operators*,  representing Boolean logic.
+# *Containment nodes*, representing physical restriction.
+
+h3. Restricted vocabularies
+
+The "Systems Biology Ontology":http://www.sbo.org (SBO) is used to provide a restricted vocabulary of terms for use in SBGN diagrams. For example, several common _material  types_ of entity are:
+
+|_.Description|_.Code|_.SBO Id|
+|Non-macromolecular ion|mt:ion|SBO:0000327|
+|Non-macromolecular radical|mt:rad|SBO:0000328|
+|Ribonucleic acid| mt:rna|SBO:0000250|
+|Protein	|mt:prot|SBO:0000297|
+|Polysaccharide	|mt:psac| 	SBO:0000249|
+
+Within a diagram, an entity can be labeled with a _conceptual type_ which indicates its role in the pathway.
+ For example:
+ 
+|_.Description|_.Code|_.SBO Id|
+|Gene|ct:gene 		|SBO:0000243|
+|Transcription start site|	ct:tss |SBO:0000329|
+|Gene coding region|		ct:coding 	|SBO:0000335|
+|Gene regulatory region|ct:grr |SBO:0000369|
+|Messenger RNA|ct:mRNA|SBO:0000278|
+
+
+These can be used to annotate various entities, by inserting this information in a _Unit of Information_.
+
+
+h3. Entity nodes
+
+There are six types of entity pool node:
+
+# Unspecified entity
+# Macromolecule
+# Simple compound
+# Nucleic acid feature
+# Multimer
+# Complex
+
+All of these entities can hold (or contain) clone markers, and units of information. In addition, macromolecules, nucleic acid features and multimers can hold _state glyphs_, which can indicate phenomena such as post-translational modifications.
+For example:
+
+!{width:20%}images/Complex1.png! indicates that protein X is phosphorylated at 4 sites.
+
+!{width:20%}images/Complex2.png! shows that the protein is bi-phosphorylated, and has 2 functional domains (indicated in _Units of Information_) .
+
+h3. Container nodes
+
+Container nodes are used to hold multiple entity nodes, to arbitrary levels of complexity.
+The main container nodes are:
+
+*Complex*   - to represent macromolecular complexes
+*Compartment*  – to represent a physically restricted location in the cell.
+*Submap*  – indicating a complex process that should be mentioned, but whose details we are not concerned with in this particular diagram.
+
+h3. Other nodes
+
+_Source_ and  _sink_ nodes are used to denote an unspecified  starting and ending points of a pathway, where we are not concerned with the details of the steps needed to create or destroy certain molecules in the pathway. For example, protein synthesis - we probably don't want to
+include all the amino-acid incorporation steps.
+
+_Perturbations_ indicate some external stimulus on the system,  e.g., light.
+
+_Phenotype_ is an externally visible alteration or biochemical process  that is an outcome of the depicted pathway – for example, apoptosis or cell division.
+
+_Clone markers_ are used to label compounds that are repeated in several places in the diagram. These can include  'currency metabolites’ as well as macromolecules. The idea is that by judiciously repeating nodes, the diagram is made clearer. 
+
+ 
+h3. Process nodes
+
+These nodes represent transformation. They are:
+
+# *Transition* : a generic, widely used  glyph representing any transformation.
+# *Uncertain process* : can represent unknown or hypothetical processes.
+# *Omitted process*  : a process whose details we are not concerned with in this pathway.
+# *Association*   : the non-covalent binding of 2 or more entity nodes into a larger complex.
+# *Dissociation*  :  the breaking up of such as complex.
+
+ For example:
+ 
+!{width:30%}images/Dissociation1.png! shows the association of a pentamer with a simple compound to form a complex.
+
+h3. Arcs
+
+Arcs connect entities with processes. In SBGN, the following types of arc exist:
+
+*Consumption*   - links substrates to a reaction transition.
+*Production*	  - -links a reaction transition to a product.
+*Modulation*     - indicates that an entity has either an unknown, or variable effect on a    reaction process.
+*Stimulation*  - a positive influence on the basal rate of the process.
+*Catalysis* – a special type of stimulation which acts by lowering the process’s activation energy.
+*Inhibition* - a negative influence on the basal rate of the process.
+*Necessary stimulation* 	-  this is an ‘absolute’ stimulation that is essential for the transition to occur – the basal rate is zero without such a stimulus.
+*Logic arc*        - connects logic gates to their input and output nodes.
+*Equivalence arc* -  indicates that an entity is equivalent to a tag.
+
+h3. Logic gates
+
+*And*  - all inputs are required for output
+*Or*    - any single input is sufficient for output
+*Not*  - a given input cannot produce the output
+
+h3. Exercises
+
+This example diagram from the SBGN specification includes several concepts such as 
+complexes, logic gates, units of information and association. Try to reproduce this diagram, using your software of choice.
+
+!{width:70%}images/exercise1.png!
+
+*Drawing hints* – try to draw smaller components first, copying them and just giving them a different name. Create the entities first, then join them together, and align the shapes at  the end.
+
+If you have brought your own pathway diagram with you, you can try putting that into SBGN, using EPE or Cell Designer.
+
+ 
+ 
+h2. The entity relationship (ER) notation
+
+The aim of this notation is to represent the totality of information about how entities (molecules) influence each other, and the relationships between them. In this notation, relationships are independent of each other. In this way diagrams can be drawn  and edited based on  specific conclusions from a scientific report.
+
+In this notation, 'entities' are a more general concept than just chemical entities.  Entities are considered as 'sources of influence', i..e, things that can modulate the activity of other components on the diagram. In SBGN-ER notation, then, there are the following entity types, which are explained more fully in the rest of the document:
+
+# *Entity interactor* - this can be any biomolecule,complex, heterodimer, or small molecule. No distinction is made between different molecule types, as is the case with the PD notation.
+# *Outcome interactor* - the outcome of an interaction or statement can be a source of influence.  Outcomes are the consequences of an interaction or statement being true.
+# *Logical operators* combine statements, and have consequences depending on the evaluation of the logic.
+# *Perturbations* such as environmental changes, can also be a source of influence.
+
+*Relationships* can be considered as rules which can be true or false. These are the relationships in SBGN-ER:
+
+# *Influences* - such as stimulation, modulation, inhibition etc
+# *Assignment statements* - depict  setting the state of an entity to a particular value. For example, phosphorylation would be depicted as an assignment statement.
+# *Interaction statements* - depict any sort of binding, complex formation, dimerization etc.,
+# *Phenotypes* - represent the outcome of a statement that is outside the scope of the current pathway.
+
+If a relationship is true, this can be the source of outcomes, which in turn can influence other entities.
+
+Let's illustrate some of the concepts involved by building a diagram describing the relationships between entities involved in the polymerase chain reaction (PCR).
+
+Here are the _entity interactors_ involved - the sense and anti-sense strands to be amplified, and the primers:
+
+!{width:70%,border:1}images/PCR1.png!
+
+Unlike in the PD notation, all molecular entities have the same visual description - there is no distinction between  macromolecules and metabolites, for example. Like PD notation, entities can have _Units of Information_ associated with them, using the same vocabularies as well. In this example the entities are designated as DNA.
+
+Now, we add some arcs to show some relationships between the entities - these arcs represent _interaction_.  In this case the interaction represents a physical interaction (annealing). We've also added a _Perturbing agent_ glyph, *Heat*, which is an entity, as it has an influence on other components
+.
+
+!{width:70%,border:5}images/PCR2.png!
+
+Heat obviously has a profound impact on a PCR reaction. ER notation can depict _influences_ such as stimulation, inhibition, or modification. In the next picture we've added 3 arcs which indicate that heat totally inhibits the annealing of primers to the DNA strands.
+
+!{width:70%,border:5}images/PCR3.png!
+
+An important concept in ER diagrams is that of _outcomes_, or consequences. For example, in ER we can depict the outcome of an interaction or change of state of an entity. In the next  diagram we depict a  consequence of a primer binding its target - namely that the binding of the sense and anti-sense strands is inhibited. An _outcome_ is depicted as a black dot. We also add an _or logic gate_ to illustrate that either primer binding its target will inhibit the sense:anti-sense strand  binding.
+
+!{width:70%,border:5}images/PCR4.png!
+
+So, this new part of the diagram can be interpreted as "If either primer binds its target, then annealing of sense and anti-sense strands is inhibited". 
+
+So far we've not addressed the notion of creation of elements. ER notation has a special symbol to represent existence:
+
+Because ER attempts to present a logically consistent view, the concept of creation is thought of  as "assigning truth to existence". In this next diagram we've added these creation glyphs, and also two new arcs which originate from the outcome of the primers annealing to their targets.  These can be read as: "If the primer binds its target, this has an outcome such that creation of a new  strand is stimulated". The state variables with the 'T' inside means 'truth'.
+
+!{width:70%,border:5}images/PCR_final.png!
+
+h3. New types of modulation.
+
+ER notation includes the following types of modulation as in PD notation - namely *Modulation*, *Stimulation*, *Inhibition*, *Necessary Stimulation*. However *Catalysis* is not included.
+
+ER defines two new sorts of modulation arrow compared to PD: the *Absolute Inhibition* and the *Absolute Stimulation* influences.
+ *Absolute Inhibition* - this will inhibit a relationship regardless of other influences.
+ *Absolute Stimulation* - this will always trigger a relationship regardless of other influences.
+  
+  (Needless to say, if both these influences target a relationship, this results in an invalid diagram.)
+  
+h3. Location
+
+To describe location, the following glyph is used. It's a special sort of State Variable:
+!{width:70%,border:5}images/LocationState.png!
+
+If we want to depict the fact that an entity has a particular location, in ER thinking this can be thought of as 'assigning location state to an entity'. E.g., the following means 'NF-kB is localized to the nucleus'.
+
+!{width:70%,border:5}images/Location2.png!
+
+
+h3. Examples of different sorts of binding in SBGN-ER notation.
+
+ER diagrams are likely to be used extensively for depicting various sorts of interaction - below are some examples:
+
+h4. Multimer formation
+
+In this diagram, the black dot between A and B represents the complex A:B, i.e., the outcome of 
+A and B binding each other. A:B can subsequently interact with C to form complex A:B:C. The ability to connect outcomes in this way greatly reduces the combinatorial complexity of the diagrams.
+!{width:70%,border:5}images/multimer.png!
+
+h4. Phosphorylation dependent binding
+
+In this diagram, B binds to the phosphorylated form of A. The lower black dot represents the complex  A ~phospho~ : B .
+
+!{width:70%,border:5}images/P-dependent_binding.png!
+
+h4. Mutually exclusive binding
+
+In the diagram below, the formation of either C:A or C:B multimer inhibits the association of the third protein.
+
+
+!{width:70%,border:5}images/MutExclusiveBinding.png!
+
+h4. Sequential binding
+
+In the diagram below, formation of  A:B is necessary before C can join the complex.
+
+
+!{width:70%,border:5}images/sequentialBinding.png!
+
+h4. Cooperative binding
+
+In the diagram below, binding of either  A:B or A:C  stimulates the association of the 3rd protein. 
+
+!{width:70%,border:5}images/coopBinding.png!
+
+h2. The Activity Flow (AF) notation.
+ 
+h3. Introduction
+
+This notation is the least detailed of the three notations,  in terms of the degree of information contained. Underlying detail of reaction mechanisms is not considered in this notation - it it were, then either PD or ER notations would be more appropriate. 
+This notation would be probably most familiar to bench biologists as a way to express functional behaviour without 
+explicitly specifying the molecular details.
+
+h2. Glyphs in AF notation
+
+
+h3. Activity nodes
+
+The core node is the 'Biological Activity'. This can represent a single biological entity, or a complex. Conversely, multiple activity nodes can be used to depict different activities of the same entity. A single glyph is used to represent an entity, with a _unit of Information_ element used to give further detail about the node's type.
+
+For example:
+!{width:70%,border:5}images/ActivityNodes.png!
+
+The shape of the _unit of information_ glyphs is the same as that used in the Process Description notation -  and thus can depict macromolecules, nucleic acid features, simple chemicals, unknown entities or complexes. In the illustration above we have 3 activities for Twist transcription factor - as a gene, macromolecule or unspecified.
+
+In addition to the biological activity nodes, _Perturbation_ and _phenotype_ elements are also considered Activity Nodes as they can exert influence on the rest of the system.
+
+h3. Container nodes
+
+As in PD notation, activity nodes can be contained inside _Compartments_. An activity in one compartment is considered distinct from that in another compartment, even if they have the same name.
+
+h3. Modulation arcs
+
+Activities influence each other by use of modulation arcs.  These include _positive influence_, _negative influence_, _unknown influence_ and _necessary influence_. 
+
+h3. Logical operators
+
+can be used to combine modulation arcs in logical combinations. 
+
+h2. An  example
+
+Let's consider the three loop Circadian clock model:
+
+!{width:40%}images/CirClockBasic.png!
+
+This diagram supposedly depicts 3 regulatory loops of the plant Circadian clock, which involves 4 transcription factors LHY, PRR and GI and X. .
+
+# First loop:
+## Light stimulates LHY transcription. LHY protein returns to nucleus and stimulates PRR transcription.
+##  PRR –vely regulates LHY.
+# 2nd loop
+## light stimulates GI production , which in turn  activates TOC1. 
+## TOC1 –vely regulates GI and stimulates protein X
+# 3rd loop 
+## Protein X stimulates LHY production. 
+## LHY inhibits transcription of GI and TOC1
+
+However, it's not very clear what is protein, what is gene, and where the reactions occur.
+
+Below is this example redrawn in AF notation:
+
+!{width:80%}images/CircadianClockAF.png!
+
+In this diagram, at the expense of slightly more complication, we have more definition of the processes involved, without introducing the concept of individual reactions and state transitions. 
+
+
+h2. Comparison of the different notations
+
+When would you want to use one notation over another? 
+
+The different notations present different views of biological knowledge. 
+
+PD notation would perhaps be most appropriate if some sort of modelling was intended for the pathway - there is more direct correspondence with say, SBML, than the other notations. More detailed knowledge is required of the set of reactions occurring, which is a pre-requisite for successful modelling.
+
+ER notation is perhaps correct if one is trying to visualize conclusions drawn from  the literature, or represent a set of non-kinetic knowledge.
+
+AF notation could be used when trying to explain some biological functionality in a less detailed way, perhaps in an initial phase of capturing the essence of a biological pathway.  It is simple enough so that it can be used manually, for example, drawing on a whiteboard, to convey ideas unambiguously.
+
+
+
+
+
+
+
+
+
+
+
